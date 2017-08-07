@@ -1,0 +1,25 @@
+#################################################
+Generate private key for server:
+keytool -genkey -alias nts -keysize 2048 -validity 365 -keyalg RSA -dname "CN=nts" -keypass ks_password -storepass ss_password -keystore server.jks
+
+Export a certificate (public key) from a server keystore:
+keytool -export -alias nts -file server_pub.crt -keystore server.jks -keypass ks_password -storepass ss_password
+
+Import a signed primary certificate to an existing server keystore:
+keytool -import -trustcacerts -alias ntc -file client_pub.crt -keystore server.jks -storepass ss_password
+
+Check server private key / trusted certificates:
+keytool -list -keystore server.jks -storepass ss_password
+
+#################################################
+Generate private key for client:
+keytool -genkey -alias ntc -keysize 2048 -validity 365 -keyalg RSA -dname "CN=ntc" -keypass kc_password -storepass sc_password -keystore client.jks
+
+Export a certificate (public key) from a client keystore:
+keytool -export -alias ntc -file client_pub.crt -keystore client.jks -keypass kc_password -storepass sc_password
+
+Import a signed primary certificate to an existing client keystore:
+keytool -import -trustcacerts -alias nts -file server_pub.crt -keystore client.jks -storepass sc_password
+
+Check client private key / trusted certificates:
+keytool -list -keystore client.jks -storepass sc_password
